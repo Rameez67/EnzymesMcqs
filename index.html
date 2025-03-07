@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enzymology MCQ Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        .quiz-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+        .options label {
+            display: block;
+            margin: 5px 0;
+        }
+        #timer {
+            font-weight: bold;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+        #submit-btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #results {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div id="timer">Time Left: 10:00</div>
+        <div id="quiz"></div>
+        <button id="submit-btn">Submit Quiz</button>
+        <div id="results"></div>
+    </div>
+
+    <script>
+        const quizData = [
+            { // 1
+                question: "1. Enzymes are primarily composed of:",
+                options: ["Carbohydrates", "Proteins", "Lipids", "Nucleic acids"],
+                answer: "B"
+            },
+            { // 2
+                question: "2. The 'lock-and-key' model explains:",
+                options: ["Allosteric regulation", "Substrate specificity", "Enzyme denaturation", "Coenzyme binding"],
+                answer: "B"
+            },
+            { // 3
+                question: "3. Which enzyme class catalyzes hydrolysis?",
+                options: ["Lyases", "Hydrolases", "Ligases", "Isomerases"],
+                answer: "B"
+            },
+            { // 4
+                question: "4. A cofactor made of metal ions is called a:",
+                options: ["Coenzyme", "Prosthetic group", "Activator", "Inhibitor"],
+                answer: "B"
+            },
+            { // 5
+                question: "5. The inactive precursor of an enzyme is a:",
+                options: ["Apoenzyme", "Holoenzyme", "Zymogen", "Isoenzyme"],
+                answer: "C"
+            },
+            { // 6
+                question: "6. The induced-fit model suggests:",
+                options: ["Rigid active site", "Dynamic enzyme-substrate interaction", "Permanent substrate alteration", "Cofactor dependency"],
+                answer: "B"
+            },
+            { // 7
+                question: "7. Km represents:",
+                options: ["Maximum reaction velocity", "Substrate concentration at ½ Vmax", "Enzyme efficiency", "Optimal pH"],
+                answer: "B"
+            },
+            { // 8
+                question: "8. Competitive inhibitors:",
+                options: ["Bind to the allosteric site", "Resemble substrate structure", "Lower Vmax", "Are irreversible"],
+                answer: "B"
+            },
+            { // 9
+                question: "9. Non-competitive inhibition affects:",
+                options: ["Km", "Vmax", "Both Km and Vmax", "Neither"],
+                answer: "B"
+            },
+            { // 10
+                question: "10. The turnover number (kcat) measures:",
+                options: ["Substrate affinity", "Enzyme efficiency", "Cofactor requirement", "pH optimum"],
+                answer: "B"
+            },
+            { // 11
+                question: "11. Pepsin works optimally at:",
+                options: ["pH 2", "pH 7", "pH 9", "pH 12"],
+                answer: "A"
+            },
+            { // 12
+                question: "12. High temperatures cause:",
+                options: ["Increased activity", "Denaturation", "Increased Km", "Coenzyme binding"],
+                answer: "B"
+            },
+            { // 13
+                question: "13. Allosteric enzymes exhibit:",
+                options: ["Michaelis-Menten kinetics", "Sigmoidal kinetics", "Single-subunit structure", "No regulation"],
+                answer: "B"
+            },
+            { // 14
+                question: "14. Feedback inhibition involves:",
+                options: ["Competitive inhibitors", "End-product binding", "Covalent modification", "pH changes"],
+                answer: "B"
+            },
+            { // 15
+                question: "15. Enzymes in lysosomes function best at:",
+                options: ["Acidic pH", "Neutral pH", "Basic pH", "High temperature"],
+                answer: "A"
+            },
+            { // 16
+                question: "16. Mg²⁺ acts as a cofactor for:",
+                options: ["Hexokinase", "Pepsin", "Lipase", "Urease"],
+                answer: "A"
+            },
+            { // 17
+                question: "17. NAD⁺ is a:",
+                options: ["Coenzyme", "Cofactor", "Inhibitor", "Substrate"],
+                answer: "A"
+            },
+            { // 18
+                question: "18. Vitamin B3 (Niacin) is a coenzyme for:",
+                options: ["Dehydrogenases", "Kinases", "Lyases", "Ligases"],
+                answer: "A"
+            },
+            { // 19
+                question: "19. Metalloenzymes require:",
+                options: ["Coenzymes", "Metal ions", "ATP", "High pH"],
+                answer: "B"
+            },
+            { // 20
+                question: "20. FAD is a coenzyme for:",
+                options: ["Oxidoreductases", "Hydrolases", "Lyases", "Ligases"],
+                answer: "A"
+            },
+            { // 21
+                question: "21. Statins inhibit:",
+                options: ["Amylase", "HMG-CoA reductase", "Acetylcholinesterase", "Carbonic anhydrase"],
+                answer: "B"
+            },
+            { // 22
+                question: "22. Phenylketonuria (PKU) results from deficiency of:",
+                options: ["Phenylalanine hydroxylase", "Tyrosinase", "Hexokinase", "Lactase"],
+                answer: "A"
+            },
+            { // 23
+                question: "23. ELISA uses:",
+                options: ["Peroxidase", "Amylase", "Lipase", "Protease"],
+                answer: "A"
+            },
+            { // 24
+                question: "24. PCR uses:",
+                options: ["Taq polymerase", "RNA polymerase", "Ligase", "Helicase"],
+                answer: "A"
+            },
+            { // 25
+                question: "25. Albinism is caused by deficiency of:",
+                options: ["Catalase", "Tyrosinase", "Urease", "Lactase"],
+                answer: "B"
+            },
+            { // 26
+                question: "26. Enzymes in detergents:",
+                options: ["Proteases", "Lipases", "Amylases", "All of the above"],
+                answer: "D"
+            },
+            { // 27
+                question: "27. Cheese production uses:",
+                options: ["Rennin", "Pepsin", "Trypsin", "Lipase"],
+                answer: "A"
+            },
+            { // 28
+                question: "28. Biofuel production uses:",
+                options: ["Cellulases", "Lipases", "Proteases", "Amylases"],
+                answer: "A"
+            },
+            { // 29
+                question: "29. DNA fingerprinting uses:",
+                options: ["Restriction endonucleases", "DNA ligase", "Helicase", "Polymerase"],
+                answer: "A"
+            },
+            { // 30
+                question: "30. Luciferase is used in:",
+                options: ["Bioluminescence", "PCR", "ELISA", "Cloning"],
+                answer: "A"
+            },
+            { // 31
+                question: "31. Uncompetitive inhibitors:",
+                options: ["Bind to ES complexes", "Increase Km", "Decrease Vmax", "Both A and C"],
+                answer: "D"
+            },
+            { // 32
+                question: "32. The SI unit for enzyme activity is:",
+                options: ["IU", "Katal", "Molarity", "ppm"],
+                answer: "B"
+            },
+            { // 33
+                question: "33. Lineweaver-Burk plots are used to:",
+                options: ["Determine Km and Vmax", "Measure enzyme size", "Detect inhibitors", "Analyze coenzymes"],
+                answer: "A"
+            },
+            { // 34
+                question: "34. Zymogens are:",
+                options: ["Active enzymes", "Inactive precursors", "Cofactors", "Isoenzymes"],
+                answer: "B"
+            },
+            { // 35
+                question: "35. The Bohr effect involves:",
+                options: ["Hemoglobin and pH", "Enzyme denaturation", "Competitive inhibition", "Coenzyme binding"],
+                answer: "A"
+            },
+            { // 36
+                question: "36. Allosteric activators:",
+                options: ["Bind to the active site", "Stabilize the inactive form", "Stabilize the active form", "Are irreversible"],
+                answer: "C"
+            },
+            { // 37
+                question: "37. Covalent modification often involves:",
+                options: ["Phosphorylation", "Methylation", "Acetylation", "All of the above"],
+                answer: "D"
+            },
+            { // 38
+                question: "38. Isoenzymes differ in:",
+                options: ["Amino acid sequence", "Km and Vmax", "Cofactor requirements", "All of the above"],
+                answer: "D"
+            },
+            { // 39
+                question: "39. Enzyme promiscuity refers to:",
+                options: ["Broad substrate specificity", "Irreversible inhibition", "Allosteric regulation", "Covalent modification"],
+                answer: "A"
+            },
+            { // 40
+                question: "40. Directed evolution is used to:",
+                options: ["Improve enzyme stability", "Increase specificity", "Enhance efficiency", "All of the above"],
+                answer: "D"
+            },
+            { // 41
+                question: "41. Gaucher’s disease is caused by deficiency of:",
+                options: ["Glucocerebrosidase", "Hexosaminidase", "Sphingomyelinase", "Arylsulfatase"],
+                answer: "A"
+            },
+            { // 42
+                question: "42. Galactosemia results from deficiency of:",
+                options: ["Galactose-1-phosphate uridyltransferase", "Phenylalanine hydroxylase", "Glucose-6-phosphatase", "Lactase"],
+                answer: "A"
+            },
+            { // 43
+                question: "43. Gout is associated with excess:",
+                options: ["Uric acid", "Urea", "Creatinine", "Bilirubin"],
+                answer: "A"
+            },
+            { // 44
+                question: "44. Celiac disease damages the enzyme:",
+                options: ["Lactase", "Dipeptidyl peptidase-4", "Sucrase", "Amylase"],
+                answer: "B"
+            },
+            { // 45
+                question: "45. Tay-Sachs disease involves deficiency of:",
+                options: ["Hexosaminidase A", "Glucocerebrosidase", "Phenylalanine hydroxylase", "Tyrosinase"],
+                answer: "A"
+            },
+            { // 46
+                question: "46. One IU equals:",
+                options: ["1 µmol substrate/min", "1 mmol substrate/sec", "1 nmol product/hr", "1 mol substrate/day"],
+                answer: "A"
+            },
+            { // 47
+                question: "47. Spectrophotometry measures:",
+                options: ["Absorbance", "Fluorescence", "Radioactivity", "Conductivity"],
+                answer: "A"
+            },
+            { // 48
+                question: "48. Enzyme activity is measured by:",
+                options: ["Substrate depletion", "Product formation", "Both A and B", "Molecular weight"],
+                answer: "C"
+            },
+            { // 49
+                question: "49. The SI unit for catalytic activity is:",
+                options: ["Katal", "IU", "Molarity", "ppm"],
+                answer: "A"
+            },
+            { // 50
+                question: "50. A stopped assay measures:",
+                options: ["Initial velocity", "Final product", "Denaturation", "Coenzyme levels"],
+                answer: "A"
+            },
+            { // 51
+                question: "51. Pepsin vs. trypsin:",
+                options: ["Both work in acidic pH", "Pepsin is a protease; trypsin is a lipase", "Pepsin (stomach), trypsin (intestine)", "Both require bile"],
+                answer: "C"
+            },
+            { // 52
+                question: "52. Hexokinase vs. glucokinase:",
+                options: ["Both phosphorylate glucose", "Hexokinase has higher Km", "Glucokinase is muscle-specific", "Hexokinase is insulin-induced"],
+                answer: "A"
+            },
+            { // 53
+                question: "53. LDH isozymes:",
+                options: ["Differ in tissue distribution", "Diagnose myocardial infarction", "Catalyze same reaction", "All of the above"],
+                answer: "D"
+            },
+            { // 54
+                question: "54. Cytochrome P450 enzymes:",
+                options: ["Metabolize drugs", "Drive photosynthesis", "Regulate glycolysis", "Replicate DNA"],
+                answer: "A"
+            },
+            { // 55
+                question: "55. Restriction enzymes:",
+                options: ["Cut DNA at specific sites", "Are used in cloning", "Recognize palindromes", "All of the above"],
+                answer: "D"
+            },
+            { // 56
+                question: "56. Penicillin inhibits:",
+                options: ["Cell wall synthesis", "DNA gyrase", "RNA polymerase", "Protein synthesis"],
+                answer: "A"
+            },
+            { // 57
+                question: "57. ACE inhibitors treat:",
+                options: ["Hypertension", "Diabetes", "Cancer", "Alzheimer’s"],
+                answer: "A"
+            },
+            { // 58
+                question: "58. MAO inhibitors treat:",
+                options: ["Depression", "Hypertension", "Diabetes", "Infections"],
+                answer: "A"
+            },
+            { // 59
+                question: "59. Protease inhibitors are used for:",
+                options: ["HIV", "Tuberculosis", "Malaria", "Hepatitis"],
+                answer: "A"
+            },
+            { // 60
+                question: "60. Aspirin inhibits:",
+                options: ["Cyclooxygenase", "Acetylcholinesterase", "Monoamine oxidase", "Carbonic anhydrase"],
+                answer: "A"
+            },
+            { // 61
+                question: "61. The steady-state assumption states:",
+                options: ["[ES] is constant", "[S] >> [E]", "[P] is negligible", "All of the above"],
+                answer: "D"
+            },
+            { // 62
+                question: "62. Lower Km indicates:",
+                options: ["Higher substrate affinity", "Lower substrate affinity", "Higher Vmax", "Lower Vmax"],
+                answer: "A"
+            },
+            { // 63
+                question: "63. Hill coefficient (n) > 1 indicates:",
+                options: ["Cooperative binding", "Competitive inhibition", "Allosteric activation", "Non-cooperative binding"],
+                answer: "A"
+            },
+            { // 64
+                question: "64. Hyperbolic plot:",
+                options: ["Michaelis-Menten", "Lineweaver-Burk", "Hill", "Eadie-Hofstee"],
+                answer: "A"
+            },
+            { // 65
+                question: "65. Highest kcat:",
+                options: ["Catalase", "Lysozyme", "DNA polymerase", "Hexokinase"],
+                answer: "A"
+            },
+            { // 66
+                question: "66. Phosphorylation typically:",
+                options: ["Activates enzymes", "Deactivates enzymes", "Either A or B", "Is irreversible"],
+                answer: "C"
+            },
+            { // 67
+                question: "67. Allosteric inhibitor of phosphofructokinase:",
+                options: ["ATP", "AMP", "Citrate", "Both A and C"],
+                answer: "D"
+            },
+            { // 68
+                question: "68. The Pasteur effect:",
+                options: ["Inhibits glycolysis in oxygen", "Increases ATP", "Causes denaturation", "Binds coenzymes"],
+                answer: "A"
+            },
+            { // 69
+                question: "69. Glucokinase vs. hexokinase:",
+                options: ["Glucokinase has higher Km", "Hexokinase is inducible", "Glucokinase is inhibited by G6P", "Both are liver-specific"],
+                answer: "A"
+            },
+            { // 70
+                question: "70. TCA cycle regulation involves:",
+                options: ["Citrate synthase", "Isocitrate dehydrogenase", "α-Ketoglutarate dehydrogenase", "All of the above"],
+                answer: "D"
+            },
+            { // 71
+                question: "71. Ribozymes are:",
+                options: ["RNA with catalytic activity", "DNA enzymes", "Protein-based", "Coenzymes"],
+                answer: "A"
+            },
+            { // 72
+                question: "72. Abzymes are:",
+                options: ["Antibodies with catalytic activity", "Artificial enzymes", "RNA enzymes", "Inactivated enzymes"],
+                answer: "A"
+            },
+            { // 73
+                question: "73. Blood clotting enzymes:",
+                options: ["Thrombin", "Fibrinogen", "Plasmin", "All of the above"],
+                answer: "A"
+            },
+            { // 74
+                question: "74. Collagen crosslinking enzyme:",
+                options: ["Lysyl oxidase", "Prolyl hydroxylase", "Collagenase", "Elastase"],
+                answer: "A"
+            },
+            { // 75
+                question: "75. ELISA uses:",
+                options: ["Alkaline phosphatase", "Peroxidase", "β-Galactosidase", "All of the above"],
+                answer: "D"
+            },
+            { // 76
+                question: "76. Acetylcholinesterase breaks down:",
+                options: ["Acetylcholine", "Dopamine", "Serotonin", "Histamine"],
+                answer: "A"
+            },
+            { // 77
+                question: "77. Glucometers use:",
+                options: ["Glucose oxidase", "Hexokinase", "Catalase", "Amylase"],
+                answer: "A"
+            },
+            { // 78
+                question: "78. Parkinson’s disease involves deficiency of:",
+                options: ["Tyrosine hydroxylase", "Dopamine β-hydroxylase", "Acetylcholinesterase", "MAO"],
+                answer: "A"
+            },
+            { // 79
+                question: "79. Prostate cancer marker:",
+                options: ["PSA", "ALT", "AST", "Amylase"],
+                answer: "A"
+            },
+            { // 80
+                question: "80. Free radical detoxification enzymes:",
+                options: ["Superoxide dismutase", "Catalase", "Glutathione peroxidase", "All of the above"],
+                answer: "D"
+            },
+            { // 81
+                question: "81. Renin converts angiotensinogen to:",
+                options: ["Angiotensin I", "Angiotensin II", "Aldosterone", "ACE"],
+                answer: "A"
+            },
+            { // 82
+                question: "82. PCR uses:",
+                options: ["Taq polymerase", "Reverse transcriptase", "Helicase", "Ligase"],
+                answer: "A"
+            },
+            { // 83
+                question: "83. Telomerase adds:",
+                options: ["Telomeres", "Primers", "Okazaki fragments", "RNA"],
+                answer: "A"
+            },
+            { // 84
+                question: "84. Fatty acid synthesis uses:",
+                options: ["Acetyl-CoA carboxylase", "HMG-CoA reductase", "Fatty acid synthase", "All of the above"],
+                answer: "D"
+            },
+            { // 85
+                question: "85. Glycogen breakdown uses:",
+                options: ["Glycogen phosphorylase", "Amylase", "Glucokinase", "Phosphoglucomutase"],
+                answer: "A"
+            },
+            { // 86
+                question: "86. Non-competitive inhibitor:",
+                options: ["Binds active site", "Lowers Vmax", "Increases Km", "Resembles substrate"],
+                answer: "B"
+            },
+            { // 87
+                question: "87. Hydrolase example:",
+                options: ["Lipase", "Decarboxylase", "Kinase", "Isomerase"],
+                answer: "A"
+            },
+            { // 88
+                question: "88. Transaminase coenzyme:",
+                options: ["Pyridoxal phosphate", "NAD⁺", "FAD", "Coenzyme A"],
+                answer: "A"
+            },
+            { // 89
+                question: "89. DNA nick-sealing enzyme:",
+                options: ["Ligase", "Helicase", "Topoisomerase", "Polymerase"],
+                answer: "A"
+            },
+            { // 90
+                question: "90. Liver detoxifies alcohol via:",
+                options: ["Alcohol dehydrogenase", "Catalase", "Peroxidase", "Acetyltransferase"],
+                answer: "A"
+            },
+            { // 91
+                question: "91. Muscle cramps during exercise suggest deficiency of:",
+                options: ["Myophosphorylase", "Hexokinase", "Lactase", "Amylase"],
+                answer: "A"
+            },
+            { // 92
+                question: "92. Elevated serum amylase indicates:",
+                options: ["Pancreatitis", "Hepatitis", "MI", "Renal failure"],
+                answer: "A"
+            },
+            { // 93
+                question: "93. Musty odor in urine suggests:",
+                options: ["Phenylketonuria", "Albinism", "Galactosemia", "Tay-Sachs"],
+                answer: "A"
+            },
+            { // 94
+                question: "94. McArdle’s disease involves:",
+                options: ["Muscle glycogen phosphorylase", "Liver phosphorylase", "Glucose-6-phosphatase", "Branching enzyme"],
+                answer: "A"
+            },
+            { // 95
+                question: "95. Elevated ALT/AST suggests:",
+                options: ["Liver damage", "Kidney failure", "Pancreatitis", "MI"],
+                answer: "A"
+            },
+            { // 96
+                question: "96. Paper bleaching uses:",
+                options: ["Laccase", "Xylanase", "Amylase", "Pectinase"],
+                answer: "A"
+            },
+            { // 97
+                question: "97. Textile processing uses:",
+                options: ["Cellulase", "Lipase", "Protease", "All of the above"],
+                answer: "D"
+            },
+            { // 98
+                question: "98. Biofuel production uses:",
+                options: ["Cellulases", "Amylases", "Lipases", "All of the above"],
+                answer: "D"
+            },
+            { // 99
+                question: "99. Cheese ripening uses:",
+                options: ["Chymosin", "Lipase", "Protease", "All of the above"],
+                answer: "D"
+            },
+            { // 100
+                question: "100. DNA fingerprinting uses:",
+                options: ["Restriction enzymes", "DNA ligase", "Helicase", "Polymerase"],
+                answer: "A"
+            },
+            {
+                question: "101. Enzymes in extremophiles:",
+                options: ["Have disulfide bonds", "Are thermostable", "Require coenzymes", "Work at neutral pH"],
+                answer: "B"
+            },
+            {
+                question: "102. Directed evolution uses:",
+                options: ["Site-directed mutagenesis", "PCR", "Western blotting", "ELISA"],
+                answer: "D"
+            },
+            {
+                question: "103. Enzyme immobilization is used in:",
+                options: ["Bioreactors", "Drug delivery", "Biosensors", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "104. Rational design involves:",
+                options: ["Predicting mutations", "Random mutagenesis", "High-throughput screening", "Phylogenetic analysis"],
+                answer: "A"
+            },
+            {
+                question: "105. Enzyme promiscuity allows:",
+                options: ["Broad substrate use", "Irreversible inhibition", "Allosteric regulation", "Covalent modification"],
+                answer: "A"
+            },
+            {
+                question: "106. Rate-limiting step:",
+                options: ["Substrate binding", "Product release", "Transition state", "Cofactor binding"],
+                answer: "C"
+            },
+            {
+                question: "107. Turnover number definition:",
+                options: ["Substrate molecules/enzyme/second", "Product formed/minute", "Substrate at Vmax", "Km/Vmax"],
+                answer: "A"
+            },
+            {
+                question: "108. Lineweaver-Burk for competitive inhibition:",
+                options: ["Same y-intercept", "Higher slope", "Both A and B", "Neither"],
+                answer: "C"
+            },
+            {
+                question: "109. Hill equation describes:",
+                options: ["Cooperative binding", "Michaelis-Menten", "Allosteric inhibition", "Non-competitive"],
+                answer: "A"
+            },
+            {
+                question: "110. Suicide inhibitors:",
+                options: ["Irreversible", "Resemble substrate", "Covalently modify", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "111. Biuret test detects:",
+                options: ["Proteins", "Enzymes", "Coenzymes", "Cofactors"],
+                answer: "A"
+            },
+            {
+                question: "112. ELISA detects:",
+                options: ["Antigens/antibodies", "Enzyme activity", "DNA", "RNA"],
+                answer: "A"
+            },
+            {
+                question: "113. Bradford assay measures:",
+                options: ["Protein concentration", "Enzyme activity", "DNA content", "pH"],
+                answer: "A"
+            },
+            {
+                question: "114. SDS-PAGE separates by:",
+                options: ["Size", "Charge", "Solubility", "Affinity"],
+                answer: "A"
+            },
+            {
+                question: "115. Kjeldahl method measures:",
+                options: ["Nitrogen", "Enzyme activity", "pH", "Temperature"],
+                answer: "A"
+            },
+            {
+                question: "116. McArdle’s disease affects:",
+                options: ["Muscle glycogen breakdown", "Liver glycogen", "Gluconeogenesis", "Glycolysis"],
+                answer: "A"
+            },
+            {
+                question: "117. Elevated ALT indicates:",
+                options: ["Liver damage", "Kidney failure", "Pancreatitis", "MI"],
+                answer: "A"
+            },
+            {
+                question: "118. Alkaptonuria results from deficiency of:",
+                options: ["Homogentisate oxidase", "Phenylalanine hydroxylase", "Tyrosinase", "Hexosaminidase"],
+                answer: "A"
+            },
+            {
+                question: "119. Lactose intolerance lacks:",
+                options: ["Lactase", "Sucrase", "Maltase", "Amylase"],
+                answer: "A"
+            },
+            {
+                question: "120. Jaundice and elevated ALT/AST suggest:",
+                options: ["Liver damage", "Kidney failure", "Pancreatitis", "MI"],
+                answer: "A"
+            },
+            {
+                question: "121. Paper bleaching uses:",
+                options: ["Laccase", "Xylanase", "Amylase", "Pectinase"],
+                answer: "A"
+            },
+            {
+                question: "122. Textile processing uses:",
+                options: ["Cellulase", "Lipase", "Protease", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "123. Biofuel production uses:",
+                options: ["Cellulases", "Amylases", "Lipases", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "124. Cheese ripening uses:",
+                options: ["Chymosin", "Lipase", "Protease", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "125. DNA fingerprinting uses:",
+                options: ["Restriction enzymes", "DNA ligase", "Helicase", "Polymerase"],
+                answer: "A"
+            },
+            {
+                question: "126. Shared by glycolysis and gluconeogenesis:",
+                options: ["Phosphoglycerate kinase", "Pyruvate kinase", "PEP carboxykinase", "Glucokinase"],
+                answer: "A"
+            },
+            {
+                question: "127. Unique to gluconeogenesis:",
+                options: ["Pyruvate carboxylase", "Phosphofructokinase", "Hexokinase", "Aldolase"],
+                answer: "D"
+            },
+            {
+                question: "128. Pyruvate to lactate:",
+                options: ["Lactate dehydrogenase", "Pyruvate dehydrogenase", "Pyruvate kinase", "Pyruvate carboxylase"],
+                answer: "A"
+            },
+            {
+                question: "129. Calvin cycle enzyme:",
+                options: ["Rubisco", "ATP synthase", "Hexokinase", "PEP carboxylase"],
+                answer: "A"
+            },
+            {
+                question: "130. C4 plant CO₂ fixation:",
+                options: ["PEP carboxylase", "Rubisco", "Pyruvate dehydrogenase", "Acetyl-CoA carboxylase"],
+                answer: "A"
+            },
+            {
+                question: "131. Directed evolution improves:",
+                options: ["Stability", "Specificity", "Efficiency", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "132. Extremophile enzymes:",
+                options: ["Thermostable", "Require coenzymes", "Work at neutral pH", "Have disulfide bonds"],
+                answer: "A"
+            },
+            {
+                question: "133. Enzyme evolution technique:",
+                options: ["Site-directed mutagenesis", "PCR", "Western blotting", "ELISA"],
+                answer: "A"
+            },
+            {
+                question: "134. Immobilization uses:",
+                options: ["Bioreactors", "Drug delivery", "Biosensors", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "135. Rational design uses:",
+                options: ["Predicted mutations", "Random mutagenesis", "High-throughput screening", "Phylogenetic analysis"],
+                answer: "A"
+            },
+            {
+                question: "136. Rate-limiting step:",
+                options: ["Substrate binding", "Product release", "Transition state", "Cofactor binding"],
+                answer: "C"
+            },
+            {
+                question: "137. Turnover number definition:",
+                options: ["Substrate molecules/enzyme/second", "Product formed/minute", "Substrate at Vmax", "Km/Vmax"],
+                answer: "A"
+            },
+            {
+                question: "138. Lineweaver-Burk for competitive inhibition:",
+                options: ["Same y-intercept", "Higher slope", "Both A and B", "Neither"],
+                answer: "C"
+            },
+            {
+                question: "139. Hill equation describes:",
+                options: ["Cooperative binding", "Michaelis-Menten", "Allosteric inhibition", "Non-competitive"],
+                answer: "A"
+            },
+            {
+                question: "140. Suicide inhibitors:",
+                options: ["Irreversible", "Resemble substrate", "Covalently modify", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "141. Mixed inhibitors:",
+                options: ["Bind ES complex", "Affect Km and Vmax", "Reversible", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "142. Covalent inhibitor:",
+                options: ["Aspirin", "Penicillin", "Ibuprofen", "Both A and B"],
+                answer: "D"
+            },
+            {
+                question: "143. ED50 measures:",
+                options: ["50% inhibition", "50% Km", "50% Vmax", "50% substrate"],
+                answer: "A"
+            },
+            {
+                question: "144. Transition-state analog:",
+                options: ["Phosphonates", "Statins", "NSAIDs", "Antibiotics"],
+                answer: "A"
+            },
+            {
+                question: "145. Irreversible inhibitor:",
+                options: ["Aspirin", "Penicillin", "Both A and B", "None"],
+                answer: "C"
+            },
+            {
+                question: "146. Biuret test detects:",
+                options: ["Proteins", "Enzymes", "Coenzymes", "Cofactors"],
+                answer: "A"
+            },
+            {
+                question: "147. ELISA detects:",
+                options: ["Antigens/antibodies", "Enzyme activity", "DNA", "RNA"],
+                answer: "A"
+            },
+            {
+                question: "148. Bradford assay measures:",
+                options: ["Protein concentration", "Enzyme activity", "DNA content", "pH"],
+                answer: "A"
+            },
+            {
+                question: "149. SDS-PAGE separates by:",
+                options: ["Size", "Charge", "Solubility", "Affinity"],
+                answer: "A"
+            },
+            {
+                question: "150. Kjeldahl method measures:",
+                options: ["Nitrogen", "Enzyme activity", "pH", "Temperature"],
+                answer: "A"
+            },
+            {
+                question: "151. Alkaptonuria:",
+                options: ["Homogentisate oxidase", "Phenylalanine hydroxylase", "Tyrosinase", "Hexosaminidase"],
+                answer: "A"
+            },
+            {
+                question: "152. Lactose intolerance:",
+                options: ["Lactase", "Sucrase", "Maltase", "Amylase"],
+                answer: "A"
+            },
+            {
+                question: "153. Jaundice and ALT/AST:",
+                options: ["Liver damage", "Kidney failure", "Pancreatitis", "MI"],
+                answer: "A"
+            },
+            {
+                question: "154. McArdle’s disease:",
+                options: ["Muscle glycogen phosphorylase", "Liver phosphorylase", "Glucose-6-phosphatase", "Branching enzyme"],
+                answer: "A"
+            },
+            {
+                question: "155. Elevated amylase:",
+                options: ["Pancreatitis", "Hepatitis", "MI", "Renal failure"],
+                answer: "A"
+            },
+            {
+                question: "156. Paper bleaching:",
+                options: ["Laccase", "Xylanase", "Amylase", "Pectinase"],
+                answer: "A"
+            },
+            {
+                question: "157. Textile processing:",
+                options: ["Cellulase", "Lipase", "Protease", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "158. Biofuel production:",
+                options: ["Cellulases", "Amylases", "Lipases", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "159. Cheese ripening:",
+                options: ["Chymosin", "Lipase", "Protease", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "160. DNA fingerprinting:",
+                options: ["Restriction enzymes", "DNA ligase", "Helicase", "Polymerase"],
+                answer: "A"
+            },
+            {
+                question: "161. Extremophile enzymes:",
+                options: ["Thermostable", "Require coenzymes", "Work at neutral pH", "Have disulfide bonds"],
+                answer: "A"
+            },
+            {
+                question: "162. Directed evolution uses:",
+                options: ["Site-directed mutagenesis", "PCR", "Western blotting", "ELISA"],
+                answer: "D"
+            },
+            {
+                question: "163. Immobilization uses:",
+                options: ["Bioreactors", "Drug delivery", "Biosensors", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "164. Rational design uses:",
+                options: ["Predicted mutations", "Random mutagenesis", "High-throughput screening", "Phylogenetic analysis"],
+                answer: "A"
+            },
+            {
+                question: "165. Enzyme promiscuity allows:",
+                options: ["Broad substrate use", "Irreversible inhibition", "Allosteric regulation", "Covalent modification"],
+                answer: "A"
+            },
+            {
+                question: "166. Rate-limiting step:",
+                options: ["Substrate binding", "Product release", "Transition state", "Cofactor binding"],
+                answer: "C"
+            },
+            {
+                question: "167. Turnover number definition:",
+                options: ["Substrate molecules/enzyme/second", "Product formed/minute", "Substrate at Vmax", "Km/Vmax"],
+                answer: "A"
+            },
+            {
+                question: "168. Lineweaver-Burk for competitive inhibition:",
+                options: ["Same y-intercept", "Higher slope", "Both A and B", "Neither"],
+                answer: "C"
+            },
+            {
+                question: "169. Hill equation describes:",
+                options: ["Cooperative binding", "Michaelis-Menten", "Allosteric inhibition", "Non-competitive"],
+                answer: "A"
+            },
+            {
+                question: "170. Suicide inhibitors:",
+                options: ["Irreversible", "Resemble substrate", "Covalently modify", "All of the above"],
+                answer: "D"
+            },
+            {
+                question: "171. Biuret test detects:",
+                options: ["Proteins", "Enzymes", "Coenzymes", "Cofactors"],
+                answer: "A"
+            },
+            {
+                question: "172. ELISA detects:",
+                options: ["Antigens/antibodies", "Enzyme activity", "DNA", "RNA"],
+                answer: "A"
+            },
+            {
+                question: "173. Bradford assay measures:",
+                options: ["Protein concentration", "Enzyme activity", "DNA content", "pH"],
+                answer: "A"
+            },
+            {
+                question: "174. SDS-PAGE separates by:",
+                options: ["Size", "Charge", "Solubility", "Affinity"],
+                answer: "A"
+            },
+            {
+                question: "175. Kjeldahl method measures:",
+                options: ["Nitrogen", "Enzyme activity", "pH", "Temperature"],
+                answer: "A"
+            }
+        ];
+        
+
+        let timeLeft = 7200; // 10 minutes
+        let timerInterval;
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                document.getElementById('timer').textContent = 
+                    `Time Left: ${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    calculateResults();
+                }
+            }, 1000);
+        }
+
+        function loadQuiz() {
+            const quizContainer = document.getElementById('quiz');
+            quizData.forEach((q, index) => {
+                const questionDiv = document.createElement('div');
+                questionDiv.className = 'question';
+                questionDiv.innerHTML = `
+                    <h3>${q.question}</h3>
+                    <div class="options">
+                        ${q.options.map((opt, i) => `
+                            <label>
+                                <input type="radio" name="q${index}" value="${String.fromCharCode(65+i)}">
+                                ${opt}
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function calculateResults() {
+            clearInterval(timerInterval);
+            const allQuestions = document.querySelectorAll('.question');
+            let score = 0;
+            
+            quizData.forEach((q, index) => {
+                const selected = document.querySelector(`input[name="q${index}"]:checked`);
+                if (selected && selected.value === q.answer) {
+                    score++;
+                }
+            });
+
+            document.getElementById('results').innerHTML = `
+                <h2>Quiz Results</h2>
+                <p>You scored ${score}/${quizData.length}</p>
+                <p>Time taken: ${10 - Math.floor(timeLeft/60)} minutes ${60 - timeLeft%60} seconds</p>
+            `;
+        }
+
+        document.getElementById('submit-btn').addEventListener('click', calculateResults);
+
+        // Initialize
+        loadQuiz();
+        startTimer();
+    </script>
+</body>
+</html>
